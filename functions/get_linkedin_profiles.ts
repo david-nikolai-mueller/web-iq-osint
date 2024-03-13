@@ -1,20 +1,20 @@
 import { IrisHttpClient, generateUniqueID } from "../default_functions";
 import {
-    PersonNameElement, Person, AnnotatedPersonName, PersonNameElementRole,
+    Person, PersonNameElement, AnnotatedPersonName, PersonNameElementRole,
     Location, AnnotatedAddress, AddressElement, AddressElementRole, LocatedAt,
     Graph, VertexReference,
-    FacebookProfileSearchScope, FacebookProfileSearchClient
+    LinkedInProfileSearchScope, LinkedinProfileSearchClient
 } from "../iris/IrisApiClient";
 
 const credentials = require('../credentials.json')
 
+
 let httpClient = new IrisHttpClient(credentials.api.username, credentials.api.key);
 
-//get_facebook_profile('David Nikolai', 'Müller', 'Germany', 'DE', 'Berlin');
-
-async function get_facebook_profile (p_first_name: string, p_last_name: string, p_country_name: string, p_country_code: string, p_locality: string) {
-    const person_id = generateUniqueID();
-    const location_id = generateUniqueID();
+get_linkedin_profile('David Nikolai', 'Müller', 'Germany', 'DE', 'Berlin');
+async function get_linkedin_profile (p_first_name: string, p_last_name: string, p_country_name: string, p_country_code: string, p_locality: string) {
+    const person_id = generateUniqueID() //"36c0b32e-99e2-4ba9-99df-0e6643334e61"; //generateUniqueID();
+    const location_id = generateUniqueID() //"febcb519-a30b-4f56-8f8d-a567edb841b1"; // generateUniqueID();
     const first_name = p_first_name;
     const last_name = p_last_name;
     const country_name = p_country_name;
@@ -64,7 +64,7 @@ async function get_facebook_profile (p_first_name: string, p_last_name: string, 
     const subject: VertexReference = new VertexReference();
     subject.vertex = person.id;
 
-    let scope: FacebookProfileSearchScope = new FacebookProfileSearchScope({
+    let scope: LinkedInProfileSearchScope = new LinkedInProfileSearchScope({
         graph: graph,
         subject: subject,
         searchLimit: 5
@@ -74,34 +74,35 @@ async function get_facebook_profile (p_first_name: string, p_last_name: string, 
     t_scope = t_scope.replaceAll('_discriminator', '_type');
     scope = JSON.parse(t_scope);
 
-    const client: FacebookProfileSearchClient = new FacebookProfileSearchClient("https://iris.web-iq.com/api", httpClient);
-    client.startFacebookProfileSearchInvestigation(scope)
+    let client: LinkedinProfileSearchClient = new LinkedinProfileSearchClient("https://iris.web-iq.com/api", httpClient);
+    client.startLinkedInProfileSearchInvestigation(scope)
         .then(res => {
             const execution_id = res.executionId;
-            var iterate_count = 0;
+            var iteration_count = 0;
 
             setTimeout(() => {
-                iterate_get_result(client, execution_id, iterate_count);
-            }, 5000)
+                get_result(client, execution_id, iteration_count);
+            }, 5000);
         })
         .catch(err => {
-            console.error(err);
-        });   
+            console.log(err);
+        });
 }
 
-async function iterate_get_result (client, execution_id, iterate_count) {
-    client.getFacebookProfileSearchResult(execution_id)
+
+async function get_result (client, execution_id, iteration_count) {
+    client.getLinkedInProfileSearchResult(execution_id)
         .then(res => {
-            iterate_count++;
+            iteration_count++;
             if (res.result === undefined) {
-                if (iterate_count > 5) {
+                if (iteration_count > 5) {
                     console.log('No results');
                     return;
                 } else {
                     console.log('No results yet');
                     setTimeout(() => {
-                        iterate_get_result(client, execution_id, iterate_count);
-                    }, 8000)
+                        get_result(client, execution_id, iteration_count);
+                    }, 8000);
                     return;
                 }
             }
@@ -111,6 +112,3 @@ async function iterate_get_result (client, execution_id, iterate_count) {
             console.error(err);
         });
 }
-  
-
-//get_facebook_profile();

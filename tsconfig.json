@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "lib": [ 
+            "es6", // Or your existing target
+            "dom",
+            "ES2021.String"
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "web-iq-functions",
+  "version": "1.0.0",
+  "description": "Hallo Liebe Welt",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/david-nikolai-mueller/web-iq-osint.git"
+  },
+  "keywords": [
+    "webiq"
+  ],
+  "author": "David Nikolai Müller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/david-nikolai-mueller/web-iq-osint/issues"
+  },
+  "homepage": "https://github.com/david-nikolai-mueller/web-iq-osint#readme",
+  "dependencies": {
+    "@types/jsdom": "^21.1.6",
+    "axios": "^1.6.7",
+    "file-saver": "^2.0.5"
+  }
+}
